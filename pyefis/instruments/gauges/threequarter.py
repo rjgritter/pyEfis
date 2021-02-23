@@ -102,12 +102,7 @@ class ThreeQuarterGauge(AbstractGauge):
         rInner = r + (self.arcWidth / 2)
         rOuter = rInner + (self.arcRadius / 12)
         for tick in range(int(self.lowRange), int(self.highRange)+1, minorTick):
-            angle = self.startAngle - self.interpolate(tick, self.sweepAngle)
-            x1 = self.arcCenter.x() + rInner*math.cos(math.radians(angle))
-            y1 = self.arcCenter.y() - rInner*math.sin(math.radians(angle))  # Reversed since y is positive down
-            x2 = self.arcCenter.x() + rOuter*math.cos(math.radians(angle))
-            y2 = self.arcCenter.y() - rOuter*math.sin(math.radians(angle))  # Reversed since y is positive down
-            p.drawLine(x1, y1, x2, y2)
+            self.drawRadialLine(p, rInner, rOuter, tick)
 
         # Major ticks
         pen.setWidth(2)
@@ -115,12 +110,7 @@ class ThreeQuarterGauge(AbstractGauge):
         rInner = r + (self.arcWidth / 2)
         rOuter = rInner + (self.arcRadius / 8)
         for tick in range(int(self.lowRange), int(self.highRange)+1, majorTick):
-            angle = self.startAngle - self.interpolate(tick, self.sweepAngle)
-            x1 = self.arcCenter.x() + rInner*math.cos(math.radians(angle))
-            y1 = self.arcCenter.y() - rInner*math.sin(math.radians(angle))  # Reversed since y is positive down
-            x2 = self.arcCenter.x() + rOuter*math.cos(math.radians(angle))
-            y2 = self.arcCenter.y() - rOuter*math.sin(math.radians(angle))  # Reversed since y is positive down
-            p.drawLine(x1, y1, x2, y2)
+            self.drawRadialLine(p, rInner, rOuter, tick)
 
         # Caution/warning ticks
         pen.setWidth(2)
