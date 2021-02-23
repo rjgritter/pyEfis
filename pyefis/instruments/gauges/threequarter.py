@@ -34,9 +34,17 @@ class ThreeQuarterGauge(AbstractGauge):
         self.arcWidth = self.height() / 6.66
         self.arcRadius = (self.height() / 2) - (self.arcWidth / 2)
 
+    def drawRadialLine(self, p, rInner, rOuter, value):
+        angle = self.startAngle - self.interpolate(value, self.sweepAngle)
+        x1 = self.arcCenter.x() + rInner*math.cos(math.radians(angle))
+        y1 = self.arcCenter.y() - rInner*math.sin(math.radians(angle))  # Reversed since y is positive down
+        x2 = self.arcCenter.x() + rOuter*math.cos(math.radians(angle))
+        y2 = self.arcCenter.y() - rOuter*math.sin(math.radians(angle))  # Reversed since y is positive down
+        p.drawLine(x1, y1, x2, y2)
+
+
     def paintEvent(self, e):
         startAngle = self.startAngle
-        totalSweep = self.sweepAngle
         r = self.arcRadius - self.arcWidth
 
         p = QPainter(self)
@@ -45,7 +53,7 @@ class ThreeQuarterGauge(AbstractGauge):
         pen.setWidth(self.arcWidth)
         pen.setCapStyle(Qt.FlatCap)
 
-        valAngle = self.interpolate(self._value, totalSweep)
+        valAngle = self.interpolate(self._value, self.sweepAngle)
 
         color = QColor(Qt.white)
 
@@ -87,30 +95,56 @@ class ThreeQuarterGauge(AbstractGauge):
         labelTick = majorTick
 
         # Draw scale
+        # Minor ticks
         pen.setColor(self.scaleColor)
         pen.setWidth(1)
         p.setPen(pen)
         rInner = r + (self.arcWidth / 2)
-        rOuter = rInner + (self.arcRadius / 10)
+        rOuter = rInner + (self.arcRadius / 12)
         for tick in range(int(self.lowRange), int(self.highRange)+1, minorTick):
-            angle = self.startAngle - self.interpolate(tick, totalSweep)
+            angle = self.startAngle - self.interpolate(tick, self.sweepAngle)
             x1 = self.arcCenter.x() + rInner*math.cos(math.radians(angle))
             y1 = self.arcCenter.y() - rInner*math.sin(math.radians(angle))  # Reversed since y is positive down
             x2 = self.arcCenter.x() + rOuter*math.cos(math.radians(angle))
             y2 = self.arcCenter.y() - rOuter*math.sin(math.radians(angle))  # Reversed since y is positive down
             p.drawLine(x1, y1, x2, y2)
 
+        # Major ticks
         pen.setWidth(2)
         p.setPen(pen)
         rInner = r + (self.arcWidth / 2)
         rOuter = rInner + (self.arcRadius / 8)
         for tick in range(int(self.lowRange), int(self.highRange)+1, majorTick):
-            angle = self.startAngle - self.interpolate(tick, totalSweep)
+            angle = self.startAngle - self.interpolate(tick, self.sweepAngle)
             x1 = self.arcCenter.x() + rInner*math.cos(math.radians(angle))
             y1 = self.arcCenter.y() - rInner*math.sin(math.radians(angle))  # Reversed since y is positive down
             x2 = self.arcCenter.x() + rOuter*math.cos(math.radians(angle))
             y2 = self.arcCenter.y() - rOuter*math.sin(math.radians(angle))  # Reversed since y is positive down
             p.drawLine(x1, y1, x2, y2)
+
+        # Caution/warning ticks
+        pen.setWidth(2)
+        rInner = r + (self.arcWidth / 2)
+        rOuter = rInner + (self.arcRadius / 8)
+        if self.lowAlarm:
+            pen.setColor(self.alarmColor)
+            p.setPen(pen)
+            self.drawRadialLine(p, rInner, rOuter, self.lowAlarm)
+
+        if self.lowWarn:
+            pen.setColor(self.warnColor)
+            p.setPen(pen)
+            self.drawRadialLine(p, rInner, rOuter, self.lowWarn)
+
+        if self.highWarn:
+            pen.setColor(self.warnColor)
+            p.setPen(pen)
+            self.drawRadialLine(p, rInner, rOuter, self.highWarn)
+
+        if self.highAlarm:
+            pen.setColor(self.alarmColor)
+            p.setPen(pen)
+            self.drawRadialLine(p, rInner, rOuter, self.highAlarm)
 
         # Labels
         pen.setColor(self.scaleColor)
@@ -127,7 +161,7 @@ class ThreeQuarterGauge(AbstractGauge):
         rOuter += f.pixelSize() * 0.6    # TODO: Parameterize this
         for tick in range(int(self.lowRange), int(self.highRange)+1, labelTick):
             numString = str(int(tick / labelDivisor))
-            angle = self.startAngle - self.interpolate(tick, totalSweep)
+            angle = self.startAngle - self.interpolate(tick, self.sweepAngle)
             x = self.arcCenter.x() + rOuter*math.cos(math.radians(angle))
             y = self.arcCenter.y() - rOuter*math.sin(math.radians(angle))  # Reversed since y is positive down
             fm = QFontMetrics(f)
