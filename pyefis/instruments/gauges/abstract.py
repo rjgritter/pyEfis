@@ -62,6 +62,8 @@ class AbstractGauge(QWidget):
         # These are the colors that are used when the value's
         # quality is marked as good
         self.bgGoodColor = QColor(Qt.black)
+        self.unitGoodColor = QColor(Qt.darkCyan)
+        self.scaleGoodColor = QColor(Qt.gray)
         self.safeGoodColor = QColor(Qt.green)
         self.warnGoodColor = QColor(Qt.yellow)
         self.alarmGoodColor = QColor(Qt.red)
@@ -71,7 +73,7 @@ class AbstractGauge(QWidget):
 
         # These colors are used for bad and fail
         self.bgBadColor = QColor(Qt.black)
-        self.safeBadColor = QColor(Qt.darkGray)
+        self.safeBadColor = QColor(Qt.darkGreen)
         self.warnBadColor = QColor(Qt.darkYellow)
         self.alarmBadColor = QColor(Qt.darkRed)
         self.textBadColor = QColor(Qt.gray)
@@ -85,6 +87,8 @@ class AbstractGauge(QWidget):
         # These are set real time based on changes in different states
         # like data quality, selected units or modes
         self.bgColor = self.bgGoodColor
+        self.unitColor = self.unitGoodColor
+        self.scaleColor = self.scaleGoodColor
         self.safeColor = self.safeGoodColor
         self.warnColor = self.warnGoodColor
         self.alarmColor = self.alarmGoodColor
