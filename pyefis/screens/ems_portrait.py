@@ -55,28 +55,28 @@ def gauge_list(width, height):
             "x":245,
             "y":0,
             "value":1500,
-            "decPlaces":2,
+            "decPlaces":1,
         },
-        # {
-        #     "name":"MAP",
-        #     "type":gauges.ArcGauge,
-        #     "key":"MAP" + ENGINE_NUMBER,
-        #     "decPlaces":1,
-        #     "width":200,
-        #     "height":100,
-        #     "x":240,
-        #     "y":0,
-        # },
-        # {
-        #     "name":"Oil Press",
-        #     "type":gauges.HorizontalBar,
-        #     "key":"OILP" + ENGINE_NUMBER,
-        #     "decPlaces":1,
-        #     "width":200,
-        #     "height":75,
-        #     "x":width - 202,
-        #     "y":0,
-        # },
+        {
+            "name":"Oil Press",
+            "type":gauges.VerticalBar,
+            "key":"OILP" + ENGINE_NUMBER,
+            "decPlaces":1,
+            "width":60,
+            "height":150,
+            "x":20,
+            "y":250,
+        },
+        {
+            "name":"Oil Press",
+            "type":gauges.VerticalBarPretty,
+            "key":"OILP" + ENGINE_NUMBER,
+            "decPlaces":1,
+            "width":80,
+            "height":150,
+            "x":100,
+            "y":250,
+        },
         # {
         #     "name":"Oil Temp",
         #     "type":gauges.HorizontalBar,
@@ -281,7 +281,7 @@ class Screen(QWidget):
         # self.chtmax.unitGroup = "Temperature"
         # self.chtmax.dbkey = "CHTMAX1"
 
-        
+
         #
         # self.egt = misc.StaticText("EGT", parent=self)
         # self.egtgroup = gauges.EGTGroup(self, self.cylCount, ["EGT11", "EGT12", "EGT13", "EGT14"])

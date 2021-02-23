@@ -61,12 +61,12 @@ class ThreeQuarterGauge(AbstractGauge):
             color = self.alarmColor
         elif self.lowWarn and self._value <= self.lowWarn:
             color = self.warnColor
-        elif self.highWarn and self._value < self.highWarn:
-            color = self.safeColor
-        elif self.highAlarm and self._value < self.highAlarm:
+        elif self.highAlarm and self._value >= self.highAlarm:
+            color = self.alarmColor
+        elif self.highWarn and self._value >= self.highWarn:
             color = self.warnColor
         else:
-            color = self.alarmColor
+            color = self.safeColor
 
         pen.setColor(color)
         p.setPen(pen)
