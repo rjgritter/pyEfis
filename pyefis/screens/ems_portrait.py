@@ -55,6 +55,7 @@ def gauge_list(width, height):
             "x":245,
             "y":0,
             "value":1500,
+            "decPlaces":2,
         },
         # {
         #     "name":"MAP",
@@ -247,38 +248,40 @@ class Screen(QWidget):
 
             self.widget_list.append(i)
 
-        # Leaving this alone for now until I can fix the CHT grouping
-        self.cht = misc.StaticText("CHT", parent=self)
-        self.chts = []
-        for x in range(self.cylCount):
-            cht = gauges.VerticalBar(self)
+        # # Leaving this alone for now until I can fix the CHT grouping
+        # self.cht = misc.StaticText("CHT", parent=self)
+        # self.chts = []
+        # for x in range(self.cylCount):
+        #     cht = gauges.VerticalBar(self)
 
-            cht.name = str(x+1)
-            cht.decimalPlaces = 0
-            cht.conversionFunction1 = lambda x: x * (9.0/5.0) + 32.0
-            cht.conversionFunction2 = lambda x: x
-            #cht.unitsOverride1 = u'\N{DEGREE SIGN}F'
-            #cht.unitsOverride2 = u'\N{DEGREE SIGN}C'
-            cht.unitGroup = "Temperature"
-            cht.setUnitSwitching()
-            cht.showUnits = False
-            cht.dbkey = "CHT1{}".format(x+1)
-            self.chts.append(cht)
-            item = fix.db.get_item(cht.dbkey)
-            item.valueChanged.connect(self.chtMax)
+        #     cht.name = str(x+1)
+        #     cht.decimalPlaces = 0
+        #     cht.conversionFunction1 = lambda x: x * (9.0/5.0) + 32.0
+        #     cht.conversionFunction2 = lambda x: x
+        #     #cht.unitsOverride1 = u'\N{DEGREE SIGN}F'
+        #     #cht.unitsOverride2 = u'\N{DEGREE SIGN}C'
+        #     cht.unitGroup = "Temperature"
+        #     cht.setUnitSwitching()
+        #     cht.showUnits = False
+        #     cht.dbkey = "CHT1{}".format(x+1)
+        #     self.chts.append(cht)
+        #     item = fix.db.get_item(cht.dbkey)
+        #     item.valueChanged.connect(self.chtMax)
 
-        self.chtmaxlabel = misc.StaticText("MAX", parent=self)
+        # self.chtmaxlabel = misc.StaticText("MAX", parent=self)
 
-        self.chtmax = gauges.NumericDisplay(self)
-        self.chtmax.name = "CHT Max"
-        self.chtmax.decimalPlaces = 0
-        self.chtmax.conversionFunction1 = lambda x: x * (9.0/5.0) + 32.0
-        self.chtmax.conversionFunction2 = lambda x: x
-        self.chtmax.unitsOverride1 = u'\N{DEGREE SIGN}F'
-        self.chtmax.unitsOverride2 = u'\N{DEGREE SIGN}C'
-        self.chtmax.setUnitSwitching()
-        self.chtmax.unitGroup = "Temperature"
-        self.chtmax.dbkey = "CHTMAX1"
+        # self.chtmax = gauges.NumericDisplay(self)
+        # self.chtmax.name = "CHT Max"
+        # self.chtmax.decimalPlaces = 0
+        # self.chtmax.conversionFunction1 = lambda x: x * (9.0/5.0) + 32.0
+        # self.chtmax.conversionFunction2 = lambda x: x
+        # self.chtmax.unitsOverride1 = u'\N{DEGREE SIGN}F'
+        # self.chtmax.unitsOverride2 = u'\N{DEGREE SIGN}C'
+        # self.chtmax.setUnitSwitching()
+        # self.chtmax.unitGroup = "Temperature"
+        # self.chtmax.dbkey = "CHTMAX1"
+
+        
         #
         # self.egt = misc.StaticText("EGT", parent=self)
         # self.egtgroup = gauges.EGTGroup(self, self.cylCount, ["EGT11", "EGT12", "EGT13", "EGT14"])
