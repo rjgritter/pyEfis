@@ -27,10 +27,11 @@ class ThreeQuarterGauge(AbstractGauge):
         self.setMinimumSize(100, 100)
         self.startAngle = -90
         self.sweepAngle = 270
-        self.arcWidth = 30
+        self.arcWidth = self.height() / 6.66
 
     def resizeEvent(self, event):
         self.arcCenter = QPoint(self.width() / 2, self.height() / 2)
+        self.arcWidth = self.height() / 6.66
         self.arcRadius = (self.height() / 2) - (self.arcWidth / 2)
 
     def paintEvent(self, e):
@@ -152,7 +153,7 @@ class ThreeQuarterGauge(AbstractGauge):
         f.setPixelSize(self.height() / 5)
         fm = QFontMetrics(f)
         valueTextWidth = fm.width(self.valueText)
-        yPos = (self.height() / 2) + f.pixelSize() + 10
+        yPos = (self.height() / 2) + f.pixelSize() + (self.height() / 20)
         path.addText(QPointF(self.width()-valueTextWidth, yPos), f, self.valueText)
         p.drawPath(path)
 
@@ -165,6 +166,6 @@ class ThreeQuarterGauge(AbstractGauge):
         fm = QFontMetrics(f)
         nameTextWidth = fm.width(self.name)
         xPos = self.width() - (nameTextWidth / 2) - (1.5 * f.pixelSize())
-        yPos += f.pixelSize() + 10
+        yPos += f.pixelSize() + (self.height() / 20)
         #p.drawText(QPoint(centerX - (r - 40), centerY - (r - 40)), self.name)
         p.drawText(QPoint(xPos, yPos), self.name)
