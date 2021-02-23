@@ -65,13 +65,33 @@ class ThreeQuarterGauge(AbstractGauge):
         drawCircle(p, self.arcCenter.x(), self.arcCenter.y(), r,
                     startAngle, -valAngle)
 
+        # Calculate tick intervals from total range
+        totalRange = self.highRange - self.lowRange
+        minorTick = 2
+        majorTick = 10
+        labelDivisor = 1
+        if totalRange >= 3000:
+            minorTick = 100
+            majorTick = 500
+            labelDivisor = 100
+        elif totalRange >= 300:
+            minorTick = 10
+            majorTick = 50
+            labelDivisor = 10
+        elif totalRange >= 30:
+            minorTick = 1
+            majorTick = 5
+            labelDivisor = 1
+        
+        labelTick = majorTick
+
         # Draw scale
         pen.setColor(self.scaleColor)
         pen.setWidth(1)
         p.setPen(pen)
         rInner = r + (self.arcWidth / 2)
         rOuter = rInner + (self.arcRadius / 10)
-        for tick in range(int(self.lowRange), int(self.highRange)+1, 100):
+        for tick in range(int(self.lowRange), int(self.highRange)+1, minorTick):
             angle = self.startAngle - self.interpolate(tick, totalSweep)
             x1 = self.arcCenter.x() + rInner*math.cos(math.radians(angle))
             y1 = self.arcCenter.y() - rInner*math.sin(math.radians(angle))  # Reversed since y is positive down
@@ -83,7 +103,7 @@ class ThreeQuarterGauge(AbstractGauge):
         p.setPen(pen)
         rInner = r + (self.arcWidth / 2)
         rOuter = rInner + (self.arcRadius / 8)
-        for tick in range(int(self.lowRange), int(self.highRange)+1, 500):
+        for tick in range(int(self.lowRange), int(self.highRange)+1, majorTick):
             angle = self.startAngle - self.interpolate(tick, totalSweep)
             x1 = self.arcCenter.x() + rInner*math.cos(math.radians(angle))
             y1 = self.arcCenter.y() - rInner*math.sin(math.radians(angle))  # Reversed since y is positive down
@@ -100,12 +120,12 @@ class ThreeQuarterGauge(AbstractGauge):
         p.setFont(f)
         opt = QTextOption(Qt.AlignLeft | Qt.AlignBottom)
         path = QPainterPath()
-        brush = QBrush(self.valueColor)
+        brush = QBrush(self.scaleColor)
         p.setBrush(brush)
 
         rOuter += f.pixelSize() * 0.6    # TODO: Parameterize this
-        for tick in range(int(self.lowRange), int(self.highRange)+1, 500):
-            numString = str(int(tick / 100)) # TODO: Parameterize this
+        for tick in range(int(self.lowRange), int(self.highRange)+1, labelTick):
+            numString = str(int(tick / labelDivisor))
             angle = self.startAngle - self.interpolate(tick, totalSweep)
             x = self.arcCenter.x() + rOuter*math.cos(math.radians(angle))
             y = self.arcCenter.y() - rOuter*math.sin(math.radians(angle))  # Reversed since y is positive down
@@ -140,7 +160,7 @@ class ThreeQuarterGauge(AbstractGauge):
         pen.setColor(self.unitColor)
         pen.setWidth(1)
         p.setPen(pen)
-        f.setPixelSize(self.height() / 8)
+        f.setPixelSize(self.height() / 12)
         p.setFont(f)
         fm = QFontMetrics(f)
         nameTextWidth = fm.width(self.name)
